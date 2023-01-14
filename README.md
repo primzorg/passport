@@ -1,4 +1,10 @@
-# Gitcoin Passport
+# Primz Passport
+
+Introducing Primz Passport - a fork of the [Gitcoin Passport](https://github.com/gitcoinco/passport), designed specifically for the gaming community. Gamers can create a decentralized and verifiable identity solution that allows them to easily connect with their favorite gaming platforms. Showcase your achievements earned inside your favorite games, export your experience and proof of human activity. It is a new way of rewarding the hard work and dedication of the gaming community. This open-source project allows for secure, decentralized, and self-sovereign identity management. It's resistant to Sybil attack which can happen in any network attempting to provide equal opportunity to all participants. Join the gaming revolution and take control of your digital identity with Primz Passport.
+
+## Our mission
+
+We believe that open source software is vital for the growth and development of any project, and as such, we strive to maintain a strong commitment to the open-source community. All new implementations done for Primz Passport will be pushed upstream, allowing the original creators to decide if they would like to merge the features into the main branch. We believe that open source drives security forward, kick-starts new careers, and builds trust in the products we create. Join us in creating a new way of rewarding the hard work and dedication!
 
 ## What is Passport?
 
