@@ -10,7 +10,8 @@ import { PlatformProps } from "../components/GenericPlatform";
 export const makeTestUserContext = (initialState?: Partial<UserContextState>): UserContextState => {
   return {
     loggedIn: true,
-    handleConnection: jest.fn(),
+    toggleConnection: jest.fn(),
+    handleDisconnection: jest.fn(),
     address: mockAddress,
     wallet: mockWallet,
     signer: undefined,
@@ -201,11 +202,13 @@ export const makeTestCeramicContext = (initialState?: Partial<CeramicContextStat
         stamp: undefined,
       },
     },
+    ceramicErrors: { error: false },
     handleAddStamp: jest.fn(),
     handleAddStamps: jest.fn(),
     handleCreatePassport: jest.fn(),
     handleDeleteStamp: jest.fn(),
     handleDeleteStamps: jest.fn(),
+    handleCheckRefreshPassport: () => Promise.resolve(true),
     ...initialState,
   };
 };

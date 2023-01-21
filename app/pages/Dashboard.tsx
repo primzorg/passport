@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // --- React Methods
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // --Components
 import { CardList } from "../components/CardList";
@@ -25,10 +25,13 @@ import { UserContext } from "../context/userContext";
 
 import { useViewerConnection } from "@self.id/framework";
 import { EthereumAuthProvider } from "@self.id/web";
+import { Banner } from "../components/Banner";
+import { getExpiredStamps } from "../utils/helpers";
+import { RefreshStampModal } from "../components/RefreshStampModal";
 
 export default function Dashboard() {
-  const { wallet, handleConnection } = useContext(UserContext);
-  const { passport, isLoadingPassport } = useContext(CeramicContext);
+  const { passport, isLoadingPassport, ceramicErrors } = useContext(CeramicContext);
+  const { wallet, toggleConnection, handleDisconnection } = useContext(UserContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -36,6 +39,8 @@ export default function Dashboard() {
 
   const [viewerConnection, ceramicConnect] = useViewerConnection();
   const { isOpen: retryModalIsOpen, onOpen: onRetryModalOpen, onClose: onRetryModalClose } = useDisclosure();
+
+  const [refreshModal, setRefreshModal] = useState(false);
 
   // Route user to home when wallet is disconnected
   useEffect(() => {
@@ -56,7 +61,7 @@ export default function Dashboard() {
   const closeModalAndDisconnect = () => {
     onRetryModalClose();
     // toggle wallet connect/disconnect
-    handleConnection();
+    toggleConnection();
   };
 
   useEffect(() => {
@@ -103,7 +108,9 @@ export default function Dashboard() {
         <div className="float-right mb-4 flex h-12 flex-row items-center font-medium text-gray-900 md:mb-0">
           <img src="/assets/gitcoinLogoDark.svg" alt="Gitcoin Logo" />
           <img className="ml-6 mr-6" src="/assets/logoLine.svg" alt="Logo Line" />
-          <img src="/assets/passportLogoBlack.svg" alt="pPassport Logo" />
+          <Link data-testid="passport-logo-link" to="/" onClick={handleDisconnection}>
+            <img src="/assets/passportLogoBlack.svg" alt="pPassport Logo" />
+          </Link>
         </div>
       </div>
 
@@ -122,11 +129,25 @@ export default function Dashboard() {
         </div>
       )}
 
+      {ceramicErrors && ceramicErrors.error && (
+        <Banner>
+          <div className="flex w-full justify-center">
+            We have detected some broken stamps in your passport. Your passport is currently locked because of this. We
+            need to fix these errors before you continue using Passport. This might take up to 5 minutes.
+            <button className="ml-2 flex underline" onClick={() => setRefreshModal(true)}>
+              Reset Passport <img className="ml-1 w-6" src="./assets/arrow-right-icon.svg" alt="arrow-right"></img>
+            </button>
+          </div>
+        </Banner>
+      )}
+
       <div className="container mx-auto flex flex-wrap-reverse px-2 md:mt-4 md:flex-wrap">
         <div className="md:w-3/5">
           <p className="mb-4 text-2xl text-black">My Stamps</p>
           <p className="text-xl text-black">
-            Select the decentralized identity verification stamps you&apos;d like to connect to.
+            Gitcoin Passport is an identity aggregator that helps you build a digital identifier showcasing your unique
+            humanity. Select the verification stamps you&apos;d like to connect to start building your passport. The
+            more verifications you have&#44; the stronger your passport will be.
           </p>
         </div>
 
@@ -206,6 +227,7 @@ export default function Dashboard() {
       />
       {/* This footer contains dark colored text and dark images */}
       <Footer lightMode={false} />
+      {refreshModal && <RefreshStampModal isOpen={refreshModal} onClose={() => setRefreshModal(false)} />}
     </>
   );
 }
